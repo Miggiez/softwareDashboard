@@ -3,16 +3,16 @@ const sof = require('../controllers/salesOfficeController')
 const auth = require('../middleware/authJWT')
 const router = express.Router()
 
-router.get('/generaljournal', auth.authenticateJWT,auth.salesOfficerAuthorization, sof.getAllGeneralJournal)
+router.get('/generaljournal', auth.authenticateJWT,auth.salesOfficerAuthorization, sof.getGeneralJournal)
 
-router.get('/generalledger', auth.authenticateJWT,auth.salesOfficerAuthorization, sof.getAllGeneralLedger)
+router.get('/generalledger', auth.authenticateJWT,auth.salesOfficerAuthorization, sof.getGeneralLedger)
 
-router.get('/incomestatement', auth.authenticateJWT, auth.salesOfficerAuthorization, sof.getAllIncomeStatement)
+router.get('/incomestatement', auth.authenticateJWT, auth.salesOfficerAuthorization, sof.getIncomeStatement)
 
-router.get('/invoice', auth.authenticateJWT, auth.salesOfficerAuthorization, sof.getAllInvoice)
+router.get('/invoice', auth.authenticateJWT, auth.salesOfficerAuthorization, sof.getInvoice)
 
-router.get('/purchaseorder', auth.authenticateJWT,auth.salesOfficerAuthorization, sof.getAllPurchaseOrder)
+router.get('/purchaseorder', auth.authenticateJWT,auth.salesOfficerAuthorization, sof.getPurchaseOrder)
 
-router.get('/inventory', auth.authenticateJWT,auth.salesOfficerAuthorization, sof.getAllInventory)
+router.get('/inventory', auth.authenticateJWT,auth.salesOfficerAuthorization, sof.getInventory)
 
 module.exports = router

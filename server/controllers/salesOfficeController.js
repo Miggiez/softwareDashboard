@@ -2,10 +2,23 @@ const db = require('../services/dbconnection')
 const helper = require('../helper')
 const config = require('../config')
 
-const getAllGeneralJournal = async (req, res) => {
-  const page = 1
+const getGeneralJournal = async (req, res) => {
+  const page = parseInt(req.query.page) || 1
+  const search = req.query.search || ""
+  const haveSearch = false
+  if(search == ""){
+    haveSearch = false
+  } else {
+    haveSearch = true
+  }
   const offset = helper.getOffset(page, config.listPerPage)
-  const rows = await db.query(`select * from generaljournal limit ${offset}, ${config.listPerPage}`)
+  const rows = ""
+  if(haveSearch == false){
+    rows = await db.query(`select * from generaljournal limit ${offset}, ${config.listPerPage}`)
+  } else {
+    rows = await db.query(`select * from generaljournal where date = '${search}' limit ${offset}, ${config.listPerPage}`)
+  }
+  
   const data = helper.emptyOrRows(rows)
   const meta = {page}
 
@@ -13,57 +26,93 @@ const getAllGeneralJournal = async (req, res) => {
   
 }
 
-const getAllGeneralLedger = async (req, res) => { 
-  const page = 1
+const getGeneralLedger = async (req, res) => { 
+  const page = parseInt(req.query.page) || 1
+  const search = req.query.search || ""
+  const haveSearch = false
+  if(search == ""){
+    haveSearch = false
+  } else {
+    haveSearch = true
+  }
   const offset = helper.getOffset(page, config.listPerPage)
-  const rows = await db.query(`select * from generalledger limit ${offset}, ${config.listPerPage}`)
+  const rows = ""
+  if(haveSearch == false){
+    rows = await db.query(`select * from generalledger limit ${offset}, ${config.listPerPage}`)
+  } else {
+    rows = await db.query(`select * from generalledger where date = '${search}' limit ${offset}, ${config.listPerPage}`)
+  }
+  
   const data = helper.emptyOrRows(rows)
   const meta = {page}
 
   return res.status(200).json({status: 200, data: data, meta: meta})
 }
 
-const getAllIncomeStatement = async(req, res) => {
+const getIncomeStatement = async(req, res) => {
   const sql = 'select * from incomestatement'
   const data = await db.query(sql)
   return res.status(200).json({status: 200, data: data})
 }
 
-const getAllInvoice= async (req, res) => {
-  const page = 1
+const getInvoice= async (req, res) => {
+  const page = parseInt(req.query.page) || 1
+  const search = req.query.search || ""
+  const haveSearch = false
+  if(search == ""){
+    haveSearch = false
+  } else {
+    haveSearch = true
+  }
   const offset = helper.getOffset(page, config.listPerPage)
-  const rows = await db.query(`select * from invoice limit ${offset}, ${config.listPerPage}`)
+  const rows = ""
+  if(haveSearch == false){
+    rows = await db.query(`select * from invoice limit ${offset}, ${config.listPerPage}`)
+  } else {
+    rows = await db.query(`select * from invoice where date = ${search} limit ${offset}, ${config.listPerPage}`)
+  }
+  
   const data = helper.emptyOrRows(rows)
   const meta = {page}
 
   return res.status(200).json({status: 200, data: data, meta: meta})
 }
 
-const getAllPurchaseOrder = async (req, res) => {
-  const page = 1
+const getPurchaseOrder = async (req, res) => {
+  const page = parseInt(req.query.page) || 1
+  const search = req.query.search || ""
+  const haveSearch = false
+  if(search == ""){
+    haveSearch = false
+  } else {
+    haveSearch = true
+  }
   const offset = helper.getOffset(page, config.listPerPage)
-  const rows = await db.query(`select * from purchaseorder limit ${offset}, ${config.listPerPage}`)
+  const rows = ""
+  if(haveSearch == false){
+    rows = await db.query(`select * from purchaseorder limit ${offset}, ${config.listPerPage}`)
+  } else {
+    rows = await db.query(`select * from purchaseorder where date = ${search} limit ${offset}, ${config.listPerPage}`)
+  }
+  
   const data = helper.emptyOrRows(rows)
   const meta = {page}
 
   return res.status(200).json({status: 200, data: data, meta: meta})
 }
 
-const getAllInventory = async (req, res) => {
-  const page = 1
-  const offset = helper.getOffset(page, config.listPerPage)
-  const rows = await db.query(`select * from inventory limit ${offset}, ${config.listPerPage}`)
+const getInventory = async (req, res) => {
+  const rows = await db.query(`select * from inventory`)
   const data = helper.emptyOrRows(rows)
-  const meta = {page}
 
-  return res.status(200).json({status: 200, data: data, meta: meta})
+  return res.status(200).json({status: 200, data: data})
 }
 
 module.exports = {
-  getAllGeneralJournal,
-  getAllGeneralLedger,
-  getAllIncomeStatement,
-  getAllInvoice,
-  getAllPurchaseOrder,
-  getAllInventory
+  getGeneralJournal,
+  getGeneralLedger,
+  getIncomeStatement,
+  getInvoice,
+  getPurchaseOrder,
+  getInventory
 }

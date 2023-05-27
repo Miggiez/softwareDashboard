@@ -7,7 +7,7 @@ router.post('/createuser', auth.authenticateJWT, auth.adminAuthorization, user.r
 
 router.post('/login', user.loginEmployee)
 
-router.get('/profile', auth.authenticateJWT, user.userProfile)
+router.get('/profile', auth.authenticateJWT, user.userProfile)  
 
 router.get('/token', user.tokenGenerator)
 
