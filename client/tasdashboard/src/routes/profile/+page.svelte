@@ -5,7 +5,6 @@
   // onMount(async() => {
   //   data = await getGeneralJournal()
   // })
-  let search = ""
   let profile = {
     userid: "",
     firstname: "",
@@ -18,8 +17,10 @@
   }
 
   onMount(async() => {
-    if(localStorage.getItem('token') !== undefined){
+    if(localStorage.getItem('token') !== null){
       await getProfile()
+    } else {
+      window.location.href = "/"
     }
   })
   
@@ -111,7 +112,7 @@
         <h3>{profile.address}</h3>
       </div>
       <div id="logout">
-        <button on:click = {logoutHandler}>Logout</button>
+        <button class="btn btn-outline-danger" on:click = {logoutHandler}>Logout</button>
       </div>
     </div>
   </div>

@@ -86,9 +86,9 @@
     chartData2 = [
       drops.utilso,
       drops.utilib,
-      drops.utilob,
       drops.utildies,
-      drops.utilgas95
+      drops.utilgas95,
+      drops.utilob,
     ]
   }  
 
