@@ -5,18 +5,18 @@ const config = require('../config')
 const getGeneralJournal = async (req, res) => {
   const page = parseInt(req.query.page) || 1
   const search = req.query.search || ""
-  const haveSearch = false
+  let haveSearch = false
   if(search == ""){
     haveSearch = false
   } else {
     haveSearch = true
   }
   const offset = helper.getOffset(page, config.listPerPage)
-  const rows = ""
+  let rows = ""
   if(haveSearch == false){
     rows = await db.query(`select * from generaljournal limit ${offset}, ${config.listPerPage}`)
   } else {
-    rows = await db.query(`select * from generaljournal where date = '${search}' limit ${offset}, ${config.listPerPage}`)
+    rows = await db.query(`select * from generaljournal where date regexp "${search}" limit ${offset}, ${config.listPerPage}`)
   }
   
   const data = helper.emptyOrRows(rows)
@@ -29,24 +29,20 @@ const getGeneralJournal = async (req, res) => {
 const getGeneralLedger = async (req, res) => { 
   const page = parseInt(req.query.page) || 1
   const search = req.query.search || ""
-  const haveSearch = false
+  let haveSearch = false
   if(search == ""){
     haveSearch = false
   } else {
     haveSearch = true
   }
   const offset = helper.getOffset(page, config.listPerPage)
-  const rows = ""
-  if(haveSearch == false){
-    rows = await db.query(`select * from generalledger limit ${offset}, ${config.listPerPage}`)
-  } else {
-    rows = await db.query(`select * from generalledger where date = '${search}' limit ${offset}, ${config.listPerPage}`)
+  let rows = ""
+  if(haveSearch == true) {
+    rows = await db.query(`select * from generalledger where expname = '${search}'`)
   }
-  
   const data = helper.emptyOrRows(rows)
-  const meta = {page}
 
-  return res.status(200).json({status: 200, data: data, meta: meta})
+  return res.status(200).json({status: 200, data: data})
 }
 
 const getIncomeStatement = async(req, res) => {
@@ -58,47 +54,41 @@ const getIncomeStatement = async(req, res) => {
 const getInvoice= async (req, res) => {
   const page = parseInt(req.query.page) || 1
   const search = req.query.search || ""
-  const haveSearch = false
+  let haveSearch = false
   if(search == ""){
     haveSearch = false
   } else {
     haveSearch = true
   }
   const offset = helper.getOffset(page, config.listPerPage)
-  const rows = ""
-  if(haveSearch == false){
-    rows = await db.query(`select * from invoice limit ${offset}, ${config.listPerPage}`)
-  } else {
-    rows = await db.query(`select * from invoice where date = ${search} limit ${offset}, ${config.listPerPage}`)
+  let rows = ""
+  if(haveSearch == true){
+    rows = await db.query(`select * from invoice inner join customer on invoice.customerid = customer.customerid where ponumber = '${search}'`)
   }
-  
-  const data = helper.emptyOrRows(rows)
-  const meta = {page}
 
-  return res.status(200).json({status: 200, data: data, meta: meta})
+  const data = helper.emptyOrRows(rows)
+
+  return res.status(200).json({status: 200, data: data})
 }
 
 const getPurchaseOrder = async (req, res) => {
   const page = parseInt(req.query.page) || 1
   const search = req.query.search || ""
-  const haveSearch = false
+  let haveSearch = false
   if(search == ""){
     haveSearch = false
   } else {
     haveSearch = true
   }
   const offset = helper.getOffset(page, config.listPerPage)
-  const rows = ""
-  if(haveSearch == false){
-    rows = await db.query(`select * from purchaseorder limit ${offset}, ${config.listPerPage}`)
-  } else {
-    rows = await db.query(`select * from purchaseorder where date = ${search} limit ${offset}, ${config.listPerPage}`)
+  let rows = ""
+  if(haveSearch == true){
+    rows = await db.query(`select * from purchaseorder inner join customer on purchaseorder.customerid = customer.customerid where ponumber = '${search}'`)
   }
-  
-  const data = helper.emptyOrRows(rows)
-  const meta = {page}
 
-  return res.status(200).json({status: 200, data: data, meta: meta})
+  const data = helper.emptyOrRows(rows)
+
+  return res.status(200).json({status: 200, data: data})
 }
 
 const getInventory = async (req, res) => {

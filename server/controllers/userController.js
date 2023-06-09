@@ -31,7 +31,7 @@ const loginEmployee = (req,res) => {
       bcrypt.compare(password.toString(),data[0].password, (err, response) => {
         if(err) return res.status(400).json({status: 400, error: "Bcrypt comparison error"})
         if(response) {
-          const token = jwt.sign({id: data[0].userid, email: data[0].email, role: data[0].role}, process.env.JWTSECRET, {expiresIn: '15m'})
+          const token = jwt.sign({id: data[0].userid, email: data[0].email, role: data[0].role}, process.env.JWTSECRET)
           const refreshToken = jwt.sign({id: data[0].userid, email: data[0].email, role: data[0].role}, process.env.REFJWTSECRET, {expiresIn: '1y'})
           refreshTokens.push(refreshToken)
           return res.status(200).json({status: 200, token: token,refToken: refreshToken,message: "You have been successfully authenticated"})
@@ -61,38 +61,36 @@ const userProfile = (req, res) => {
   })
 }
 
-const tokenGenerator = async (req, res) => {
-  const refreshToken = req.header("x-auth-token")
+// const tokenGenerator = async (req, res) => {
+//   const refreshToken = req.header("x-auth-token")
 
-  if(!refreshToken){
-    res.status(401).json({error: "Token not found"})
-  }
+//   if(!refreshToken){
+//     res.status(401).json({error: "Token not found"})
+//   }
 
-  if(!refreshTokens.includes(refreshToken)){
-    res.status(403).json({error: "Invalid refresh token"})
-  }
+//   if(!refreshTokens.includes(refreshToken)){
+//     res.status(403).json({error: "Invalid refresh token"})
+//   }
 
-  try {
-    const user = await jwt.verify(refreshToken, process.env.REFJWTSECRET)
-    const {id, email, role} = user
-    const token = await jwt.sign({id, email, role}, process.env.JWTSECRET, {expiresIn: '15m'})
-    res.status(200).json({status: 200, token: token})
-  } catch(error) {
-    res.status(403).json({status: 403, error: "Invalid Token"})
-  }
-}
+//   try {
+//     const user = await jwt.verify(refreshToken, process.env.REFJWTSECRET)
+//     const {id, email, role} = user
+//     const token = await jwt.sign({id, email, role}, process.env.JWTSECRET, {expiresIn: '15m'})
+//     res.status(200).json({status: 200, token: token})
+//   } catch(error) {
+//     res.status(403).json({status: 403, error: "Invalid Token"})
+//   }
+// }
 
-const logout = (req, res) => {
-  const refreshToken = req.header('x-auth-token')
-  refreshTokens = refreshTokens.filter((token) => token !== refreshToken)
+// const logout = (req, res) => {
+//   const refreshToken = req.header('x-auth-token')
+//   refreshTokens = refreshTokens.filter((token) => token !== refreshToken)
   
-  res.sendStatus(204)
-}
+//   res.sendStatus(204)
+// }
 
 module.exports = {
   registerEmployee,
   loginEmployee,
   userProfile,
-  tokenGenerator,
-  logout
 }

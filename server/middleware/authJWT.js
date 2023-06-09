@@ -24,7 +24,7 @@ const adminAuthorization = (req, res, next) => {
   }
 }
 
-const operatoreAuthorization = (req,res,next) => {
+const operatorAuthorization = (req,res,next) => {
   const {role} = req.user
   if(role == "operator" || role == "admin"){
     next()
@@ -44,7 +44,7 @@ const salesOfficerAuthorization = (req,res,next) => {
 
 module.exports = {
   authenticateJWT,
-  operatoreAuthorization,
+  operatorAuthorization,
   salesOfficerAuthorization,
   adminAuthorization
 }
